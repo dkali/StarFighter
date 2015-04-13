@@ -4,22 +4,19 @@ using UnityStandardAssets.CrossPlatformInput;
 
 public class CameraZoom : MonoBehaviour {
 	public float camera_smooth;
+	private GameObject player;
 
 	// Use this for initialization
 	void Start () {
-	
+		player = GameObject.Find ("player");
 	}
 	
 	// Update is called once per frame
 	void Update () {
-#if UNITY_IPHONE || UNITY_ANDROID
-		//read from joystick
-		float moveHorizontal = CrossPlatformInputManager.GetAxis("Horizontal");
-		float moveVertical = CrossPlatformInputManager.GetAxis("Vertical");
-#else
-		float moveHorizontal = Input.GetAxis ("Horizontal");
-		float moveVertical = Input.GetAxis ("Vertical");
-#endif
+		Rigidbody pl_rb = player.GetComponent<Rigidbody> ();
+		float moveHorizontal = pl_rb.velocity.x;
+		float moveVertical = pl_rb.velocity.z;
+
 		Camera cam = GetComponent<Camera> ();
 
 		float delta = 0;

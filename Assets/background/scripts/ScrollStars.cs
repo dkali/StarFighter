@@ -6,24 +6,25 @@ public class ScrollStars : MonoBehaviour {
 	public float scrollSpeed;
 	private Renderer rend;
 	private Vector2 savedOffset, initialOffset;
+	private GameObject player;
+	private Rigidbody pl_rb;
+	private PlayerController pl_controller;
 
 	// Use this for initialization
 	void Start () {
 		rend = GetComponent<Renderer>();
 		initialOffset = rend.sharedMaterial.GetTextureOffset ("_MainTex");
 		savedOffset = rend.sharedMaterial.GetTextureOffset ("_MainTex");
+		player = GameObject.Find ("player");
+		pl_rb = player.GetComponent<Rigidbody> ();
+		pl_controller = player.GetComponent<PlayerController> ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-#if UNITY_IPHONE || UNITY_ANDROID
-		//read from joystick
-		float moveHorizontal = CrossPlatformInputManager.GetAxis ("Horizontal");
-		float moveVertical = CrossPlatformInputManager.GetAxis ("Vertical");
-#else
-		float moveHorizontal = Input.GetAxis ("Horizontal");
-		float moveVertical = Input.GetAxis ("Vertical");
-#endif
+		float moveHorizontal = pl_rb.velocity.x / pl_controller.speed;
+		float moveVertical = pl_rb.velocity.z / pl_controller.speed;
+
 		float dx = 0, dy = 0;
 		//assuming that moveHorizontal=1 is a 100% of scrollSpeed
 		dx = scrollSpeed * Mathf.Abs (moveHorizontal);

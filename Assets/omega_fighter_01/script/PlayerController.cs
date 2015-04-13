@@ -40,6 +40,7 @@ public class PlayerController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		players_engine = GameObject.Find ("player_engine_particle");
+		players_engine.SetActive(false);
 		br_params = new BrakingParams();
 		previous_frame_movement_vector = Vector3.zero;
 	}
@@ -64,15 +65,12 @@ public class PlayerController : MonoBehaviour {
 			{
 				//input released at this frame
 				players_engine.SetActive(false);
-				print ("INPUT RELEASED");
-				print ("player speed: " + rb.velocity.ToString());
 				br_params = new BrakingParams(rb.velocity);
 			}
 
 			//slowly stop the movement
 			if (br_params.tParam < 1) {
 				br_params.tParam += braking_speed;
-				//print ("tParam = " + br_params.tParam.ToString());
 				float new_x = Mathf.Lerp(br_params.x_speed, 0, br_params.tParam);
 				float new_z = Mathf.Lerp(br_params.y_speed, 0, br_params.tParam);
 				rb.velocity = new Vector3(new_x, 0.0f, new_z);
